@@ -4,8 +4,11 @@
   "description": "Pre-made gulp for shopify projects",
   "main": "index.js",
   "repository": "sintra-poland/gulp-shopify",
-  "author": "cleverbeagle",
+  "author": "Norbert Pabisz <n.pabisz@sintraconsulting.eu>",
   "license": "MIT",
+  "engines": {
+    "node": ">= 16.15.1"
+  },
   "homepage": "https://github.com/sintra-poland/gulp-shopify",
   "dependencies": {},
   "devDependencies": {
