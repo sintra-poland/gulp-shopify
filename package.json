@@ -30,7 +30,7 @@
     "sass": "^1.52.3"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "sintra-poland:registry": "https://npm.pkg.github.com"
   },
   "bugs": {
     "url": "https://github.com/sintra-poland/gulp-shopify/issues"
