@@ -1,6 +1,6 @@
 {
   "name": "gulp-shopify",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Pre-made gulp for shopify projects",
   "main": "index.js",
   "repository": {
@@ -10,7 +10,7 @@
   "author": "Norbert Pabisz <n.pabisz@sintraconsulting.eu>",
   "license": "MIT",
   "engines": {
-    "node": ">= 16.15.1"
+    "node": ">= 14"
   },
   "homepage": "https://github.com/sintra-poland/gulp-shopify",
   "devDependencies": {
