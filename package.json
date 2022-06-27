@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Pre-made gulp for shopify projects",
   "main": "index.js",
-  "repository": "sintra-poland/gulp-shopify",
+  "repository": "git://github.com/sintra-poland/gulp-shopify.git",
   "author": "Norbert Pabisz <n.pabisz@sintraconsulting.eu>",
   "license": "MIT",
   "engines": {
@@ -26,5 +26,8 @@
     "gulp-sass": "^5.1.0",
     "gulp-uglify": "^3.0.2",
     "sass": "^1.52.3"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   }
 }
