@@ -1,6 +1,6 @@
 {
   "name": "gulp-shopify",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Pre-made gulp for shopify projects",
   "main": "index.js",
   "repository": {
