@@ -3,14 +3,16 @@
   "version": "1.0.0",
   "description": "Pre-made gulp for shopify projects",
   "main": "index.js",
-  "repository": "git://github.com/sintra-poland/gulp-shopify.git",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sintra-poland/gulp-shopify.git"
+  },
   "author": "Norbert Pabisz <n.pabisz@sintraconsulting.eu>",
   "license": "MIT",
   "engines": {
     "node": ">= 16.15.1"
   },
   "homepage": "https://github.com/sintra-poland/gulp-shopify",
-  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.18.2",
     "@babel/preset-env": "^7.18.2",
@@ -29,5 +31,15 @@
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/sintra-poland/gulp-shopify/issues"
+  },
+  "scripts": {
+    "test": "exit 0"
+  },
+  "keywords": [
+    "gulp",
+    "shopify"
+  ]
 }
