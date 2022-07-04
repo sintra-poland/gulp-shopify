@@ -2,12 +2,16 @@
 
 This is pre-made gulp tasks for shopify projects.
 
+## Installation
+
+`npm i @sintra-poland/gulp-shopify --save-dev`
+
 ## Basic usage
 
 Minimal `Gulpfile.js` with default configuration:
 
 ```js
-const { Gulp } = require('./gulp-sintra/index');
+const { Gulp } = require('@sintra-poland/gulp-shopify');
 
 new Gulp(exports);
 ```
@@ -15,7 +19,7 @@ new Gulp(exports);
 Additional configuration:
 
 ```js
-const { Gulp } = require('./gulp-sintra/index');
+const { Gulp } = require('@sintra-poland/gulp-shopify');
 
 new Gulp(exports, {
   prefix: 'new-project'  
