@@ -1,6 +1,6 @@
 {
   "name": "@sintra-poland/gulp-shopify",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Pre-made gulp for shopify projects",
   "main": "index.js",
   "repository": {
@@ -13,7 +13,7 @@
     "node": ">= 14"
   },
   "homepage": "https://github.com/sintra-poland/gulp-shopify",
-  "devDependencies": {
+  "dependencies": {
     "@babel/core": "^7.18.2",
     "@babel/preset-env": "^7.18.2",
     "gulp": "^4.0.2",
