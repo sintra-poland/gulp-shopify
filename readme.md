@@ -111,12 +111,10 @@ new Gulp(exports, {
     babelOptions: {
       presets: [
         ['@babel/env', {
-          modules: false
-        }]
-      ],
-      plugins: [
-        ['@babel/plugin-transform-classes', {
-          loose: false
+          modules: false,
+          targets: {
+            chrome: 60
+          }
         }]
       ]
     }
