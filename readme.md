@@ -101,6 +101,8 @@ new Gulp(exports, {
     vendors: 'vendors/js/*.js',
     // Vendors output file name
     vendorsName: 'vendors',
+    // Group js files if under one directory
+    group: true,
     // Uglify output file
     uglify: true,
     // This prevent clean js from rendering to file

@@ -48,6 +48,7 @@ class Gulp
         name: 'all',
         vendors: 'vendors/js/*.js',
         vendorsName: 'vendors',
+        group: true,
         uglify: true,
         onlyMinified: true,
         babelOptions: {
@@ -121,6 +122,8 @@ class Gulp
       return result;
     }
 
+    const groupedJs = [];
+
     return src(config.js.src)
       .pipe(foreach(function (stream, file) {
         if (file.isDirectory()) {
@@ -131,6 +134,8 @@ class Gulp
         const dirs = [];
         let type = '';
         let dir = path.dirname(file.history[0]);
+        let jsSrc = file.history[0];
+        let wasGrouped = false;
 
         while (true) {
           type = path.basename(dir);
@@ -147,7 +152,21 @@ class Gulp
 
         let renamed = name;
 
-        if (dirs.length > 0) {
+        // Group javascript
+        if (config.js.group && dirs.length > 1) {
+          const group = dirs.slice(-2).reverse();
+          const grouped = group.join(config.glue);
+
+          if (groupedJs.indexOf(grouped) > -1) {
+            return stream;
+          }
+
+          groupedJs.push(grouped);
+
+          jsSrc = dir + '/' + config.js.baseDirectory + '/' + group.join('/') + '/**/*.js';
+          renamed = grouped + '.js';
+          wasGrouped = true;
+        } else if (dirs.length > 0) {
           renamed = dirs.reverse().join(config.glue) + config.glue + renamed;
         }
 
@@ -155,9 +174,13 @@ class Gulp
           renamed = config.prefix + config.glue + renamed;
         }
 
-        let result = src(file.history[0])
+        let result = src(jsSrc)
           .pipe(plumber())
           .pipe(babel(config.js.babelOptions));
+
+        if (wasGrouped) {
+          result = result.pipe(concat(renamed));
+        }
 
         if (!config.js.onlyMinified) {
           result = result.pipe(rename(renamed))
