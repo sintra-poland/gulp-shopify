@@ -43,19 +43,17 @@ class Gulp
       const packageJson = JSON.parse(fs.readFileSync(__dirname + '/package.json').toString());
       const packageLockJson = JSON.parse(fs.readFileSync(process.env.INIT_CWD + '/package-lock.json').toString());
       const packageVersion = packageJson.version;
+      const packageLockVersion = packageLockJson.dependencies['@sintra-poland/gulp-shopify'].version;
 
-      packageLockJson.dependencies.forEach((data, dependency) => {
-        if (dependency === '@sintra-poland/gulp-shopify') {
-          if (semver.gt(data.version, packageVersion)) {
-            console.log('There is newer version of ' + colors.cyan('@sintra-poland/gulp-shopify') + ' in ' + colors.cyan('package-lock.json'));
-            console.log('New version: ' + colors.green(data.version));
-            console.log('Old version: ' + colors.yellow(packageVersion));
-            console.log('In order to continue please run ' + colors.cyan('npm install'));
+      if (semver.gt(packageLockVersion, packageVersion)) {
+        console.log('');
+        console.log('There is newer version of ' + colors.cyan('@sintra-poland/gulp-shopify') + ' in ' + colors.cyan('package-lock.json'));
+        console.log('New version: ' + colors.green(packageLockVersion));
+        console.log('Old version: ' + colors.yellow(packageVersion));
+        console.log('In order to continue please run ' + colors.cyan('npm install'));
 
-            process.exit(0);
-          }
-        }
-      });
+        process.exit(0);
+      }
     } catch (e) {
       console.log(colors.red('Failed to check @sintra-poland/gulp-shopify version'));
     }
