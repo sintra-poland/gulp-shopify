@@ -11,11 +11,17 @@ const minify = require('gulp-minify');
 const uglify = require('gulp-uglify');
 const concat = require('gulp-concat');
 const path = require('path');
+const fs = require('fs');
+const colors = require('colors');
+const semver = require('semver');
 
 class Gulp
 {
   constructor (_exports, config)
   {
+    this.config = this.deepMerge(this.defaults(), config ? config : {});
+    this.checkVersion();
+
     task('js', this.taskJs.bind(this));
     task('css', this.taskCss.bind(this));
 
@@ -25,13 +31,40 @@ class Gulp
     task('watch', this.taskWatcher.bind(this));
 
     _exports.default = this.taskDefault();
+  }
 
-    this.config = this.deepMerge(this.defaults(), config ? config : {});
+  checkVersion ()
+  {
+    if (this.config.skipVersionCheck) {
+      return;
+    }
+
+    try {
+      const packageJson = JSON.parse(fs.readFileSync(__dirname + '/package.json').toString());
+      const packageLockJson = JSON.parse(fs.readFileSync(process.env.INIT_CWD + '/package-lock.json').toString());
+      const packageVersion = packageJson.version;
+
+      packageLockJson.dependencies.forEach((data, dependency) => {
+        if (dependency === '@sintra-poland/gulp-shopify') {
+          if (semver.gt(data.version, packageVersion)) {
+            console.log('There is newer version of ' + colors.cyan('@sintra-poland/gulp-shopify') + ' in ' + colors.cyan('package-lock.json'));
+            console.log('New version: ' + colors.green(data.version));
+            console.log('Old version: ' + colors.yellow(packageVersion));
+            console.log('In order to continue please run ' + colors.cyan('npm install'));
+
+            process.exit(0);
+          }
+        }
+      });
+    } catch (e) {
+      console.log(colors.red('Failed to check @sintra-poland/gulp-shopify version'));
+    }
   }
 
   defaults ()
   {
     return {
+      skipVersionCheck: false,
       prefix: 'custom',
       glue: '.',
       dest: '../assets',
