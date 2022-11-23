@@ -69,7 +69,11 @@ Default `Dawn` theme project structure should be as follows:
 This is default configuration:
 
 ```js
-new Gulp(exports, {
+new Gulp(exports, {  
+  // Use line breaks in css output
+  lineBreaks: true,
+  // Skip module version checking
+  skipVersionCheck: false,
   // Destination directory for compiled files 
   dest: '../assets',
   // Prefix for compiled files
