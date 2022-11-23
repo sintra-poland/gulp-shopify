@@ -10,6 +10,7 @@ const plumber = require('gulp-plumber');
 const minify = require('gulp-minify');
 const uglify = require('gulp-uglify');
 const concat = require('gulp-concat');
+const clean = require('gulp-clean-css');
 const path = require('path');
 const fs = require('fs');
 const colors = require('colors');
@@ -22,15 +23,20 @@ class Gulp
     this.config = this.deepMerge(this.defaults(), config ? config : {});
     this.checkVersion();
 
-    task('js', this.taskJs.bind(this));
-    task('css', this.taskCss.bind(this));
+    this.task('js', this.taskJs.bind(this));
+    this.task('css', this.taskCss.bind(this));
 
-    task('vendor-css', this.taskVendorCss.bind(this));
-    task('vendor-js', this.taskVendorJs.bind(this));
+    this.task('vendor-css', this.taskVendorCss.bind(this));
+    this.task('vendor-js', this.taskVendorJs.bind(this));
 
-    task('watch', this.taskWatcher.bind(this));
+    this.task('watch', this.taskWatcher.bind(this));
 
     _exports.default = this.taskDefault();
+  }
+
+  task (name, callback)
+  {
+    task(name, callback);
   }
 
   checkVersion ()
@@ -62,6 +68,7 @@ class Gulp
   defaults ()
   {
     return {
+      lineBreaks: true,
       skipVersionCheck: false,
       prefix: 'custom',
       glue: '.',
@@ -237,12 +244,19 @@ class Gulp
     const config = this.config;
 
     if (!config.split) {
-      return src(config.css.src)
+      let output = src(config.css.src)
         .pipe(sass({
           outputStyle: 'compressed'
         }))
-        .pipe(autoprefixer())
-        .pipe(rename(config.css.name + '.min.css'))
+        .pipe(autoprefixer());
+
+      if (config.lineBreaks) {
+        output = output.pipe(clean({
+          format: 'keep-breaks'
+        }))
+      }
+
+      return output.pipe(rename(config.css.name + '.min.css'))
         .pipe(dest(config.dest));
     }
 
@@ -281,12 +295,19 @@ class Gulp
           renamed = config.prefix + config.glue + renamed;
         }
 
-        return src(file.history[0])
+        let output = src(file.history[0])
           .pipe(sass({
             outputStyle: 'compressed'
           }))
-          .pipe(autoprefixer())
-          .pipe(rename(renamed))
+          .pipe(autoprefixer());
+
+        if (config.lineBreaks) {
+          output = output.pipe(clean({
+            format: 'keep-breaks'
+          }))
+        }
+
+        return output.pipe(rename(renamed))
           .pipe(dest(config.dest));
       }));
   }
