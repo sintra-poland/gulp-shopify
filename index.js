@@ -303,7 +303,17 @@ class Gulp
 
         if (config.lineBreaks) {
           output = output.pipe(clean({
-            format: 'keep-breaks'
+            format: {
+              breaks: {
+                afterAtRule: true,
+                afterBlockBegins: true,
+                afterBlockEnds: true,
+                afterComment: true,
+                afterRuleEnds: true,
+                beforeBlockEnds: true
+              },
+              breakWith: 'unix'
+            }
           }))
         }
 
