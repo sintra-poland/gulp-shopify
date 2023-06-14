@@ -194,6 +194,7 @@ class Gulp
         if (config.js.group && dirs.length > 1) {
           const group = dirs.slice(-2).reverse();
           const grouped = group.join(config.glue);
+          const groupDirectory = dir + '/' + config.js.baseDirectory + '/' + group.join('/');
 
           if (groupedJs.indexOf(grouped) > -1) {
             return stream;
@@ -201,7 +202,24 @@ class Gulp
 
           groupedJs.push(grouped);
 
-          jsSrc = dir + '/' + config.js.baseDirectory + '/' + group.join('/') + '/**/*.js';
+          jsSrc = [];
+
+          // Add js files from directories first (sorted alphabetically)
+          fs.readdirSync(groupDirectory).sort().forEach(filename => {
+            if (fs.lstatSync(groupDirectory + '/' + filename).isDirectory()) {
+              fs.readdirSync(groupDirectory + '/' + filename).sort().forEach(filenameInDir => {
+                jsSrc.push(groupDirectory + '/' + filename + '/' + filenameInDir);
+              });
+            }
+          });
+
+          // Add rest of the files (sorted alphabetically)
+          fs.readdirSync(groupDirectory).sort().forEach(filename => {
+            if (!fs.lstatSync(groupDirectory + '/' + filename).isDirectory() && filename.endsWith('.js')) {
+              jsSrc.push(groupDirectory + '/' + filename);
+            }
+          });
+
           renamed = grouped + '.js';
           wasGrouped = true;
         } else if (dirs.length > 0) {
