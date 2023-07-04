@@ -353,8 +353,8 @@ class Gulp
 
         if( config.css.splitCoreMedia && renamed.indexOf('core.') > -1 ) {
           output = output.pipe(mediaQueriesSplitter([
-            {media: ['none', {min: '0px', minUntil: '479px', max: '9999px'}], filename: renamed.replace('.min.css', '.mobile.min.css') },
-            {media: {min: '480px'}, filename: renamed.replace('.min.css', '.desktop.min.css')},
+            {media: ['none', {min: '0px', minUntil: '599px', max: '9999px'}], filename: renamed.replace('.min.css', '.mobile.min.css') },
+            {media: {min: '600px'}, filename: renamed.replace('.min.css', '.desktop.min.css')},
           ]));
         } else {
           output = output.pipe(rename(renamed))
