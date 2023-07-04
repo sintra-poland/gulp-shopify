@@ -15,6 +15,7 @@ const path = require('path');
 const fs = require('fs');
 const colors = require('colors');
 const semver = require('semver');
+const mediaQueriesSplitter = require('gulp-media-queries-splitter');
 
 class Gulp
 {
@@ -75,6 +76,7 @@ class Gulp
       dest: '../assets',
       split: true,
       css: {
+        splitCoreMedia: false,
         src: 'sass/**/*',
         name: 'style',
         vendors: 'vendors/css/*.css',
@@ -333,10 +335,33 @@ class Gulp
               breakWith: 'unix'
             }
           }))
+        } else {
+          output = output.pipe(clean({
+            level: {
+              1: {
+                all: true,
+                normalizeUrls: false
+              },
+              2: {
+                all: false,
+                restructureRules: false
+              }
+            }
+          }))
         }
 
-        return output.pipe(rename(renamed))
-          .pipe(dest(config.dest));
+
+        if( config.css.splitCoreMedia && renamed.indexOf('core.') > -1 ) {
+          output = output.pipe(mediaQueriesSplitter([
+            {media: ['none', {min: '0px', minUntil: '479px', max: '9999px'}], filename: renamed.replace('.min.css', '.mobile.min.css') },
+            {media: {min: '480px'}, filename: renamed.replace('.min.css', '.desktop.min.css')},
+          ]));
+        } else {
+          output = output.pipe(rename(renamed))
+        }
+
+        return output.pipe(dest(config.dest));
+          
       }));
   }
 
