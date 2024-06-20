@@ -16,6 +16,7 @@ const fs = require('fs');
 const colors = require('colors');
 const semver = require('semver');
 const mediaQueriesSplitter = require('gulp-media-queries-splitter');
+const sourcemaps = require('gulp-sourcemaps');
 
 class Gulp
 {
@@ -91,6 +92,7 @@ class Gulp
         group: true,
         uglify: true,
         onlyMinified: true,
+        sourceFiles: false,
         babelOptions: {
           presets: [
             ['@babel/env', {
@@ -140,8 +142,13 @@ class Gulp
     const config = this.config;
 
     if (!config.split) {
-      let result = src(config.js.src)
-        .pipe(plumber())
+      let result = src(config.js.src);
+
+      if (config.js.sourceFiles) {
+        result = result.pipe(sourcemaps.init());
+      }
+
+      result = result.pipe(plumber())
         .pipe(babel(config.js.babelOptions))
         .pipe(concat(config.js.name + '.js'));
 
@@ -155,6 +162,10 @@ class Gulp
         result = result.pipe(uglify());
       } else {
         result = result.pipe(minify());
+      }
+
+      if (config.js.sourceFiles) {
+        result = result.pipe(sourcemaps.write('./'));
       }
 
       result = result.pipe(dest(config.dest));
@@ -232,8 +243,13 @@ class Gulp
           renamed = config.prefix + config.glue + renamed;
         }
 
-        let result = src(jsSrc)
-          .pipe(plumber())
+        let result = src(jsSrc);
+
+        if (config.js.sourceFiles) {
+          result = result.pipe(sourcemaps.init());
+        }
+
+        result = result.pipe(plumber())
           .pipe(babel(config.js.babelOptions));
 
         if (wasGrouped) {
@@ -251,6 +267,10 @@ class Gulp
           result = result.pipe(uglify());
         } else {
           result = result.pipe(minify());
+        }
+
+        if (config.js.sourceFiles) {
+          result = result.pipe(sourcemaps.write('./'));
         }
 
         result = result.pipe(dest(config.dest));
